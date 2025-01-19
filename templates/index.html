@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Remoto</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Control Remoto</h1>
+
+    <div class="section">
+        <h3>Control de Música</h3>
+        <div class="music-controls">
+            <i class="fas fa-backward" onclick="fetch('/music?control=previous')"></i>
+            <i class="fas fa-play" onclick="fetch('/music?control=play')"></i>
+            <i class="fas fa-forward" onclick="fetch('/music?control=next')"></i>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h3>Control de Brillo</h3>
+        <input type="range" min="0" max="100" step="1" oninput="adjustBrightness(this.value)">
+    </div>
+    
+    <div class="section">
+        <h3>Control de Volumen</h3>
+        <input type="range" min="0" max="100" step="1" oninput="adjustVolume(this.value)">
+    </div>
+
+    <div class="section">
+        <h3>Ejecutar Fortnite 🗿</h3>
+        <button class="execute-file" onclick="executeFile()">Ejecutar Fortnite</button>
+    </div>
+    
+    <div class="section">
+        <h3>Apagar Sistema</h3>
+        <button class="shutdown" onclick="confirmShutdown()">Apagar</button>
+    </div>
+    
+    <div class="section">
+        <h3>Escanea este código QR para conectarte:</h3>
+        <img src='/qrcode.png' alt="Código QR">
+    </div>
+
+    <script>
+        function adjustBrightness(value) {
+            fetch(`/brightness?level=${value}`);
+        }
+        function adjustVolume(value) {
+            fetch(`/volume?level=${value}`);
+        }
+        function confirmShutdown() {
+            const confirmation = window.confirm("¿Estás seguro de que deseas apagar el sistema?");
+            if (confirmation) {
+                fetch('/shutdown')
+                    .then(response => response.text())
+                    .then(data => alert(data))
+                    .catch(error => alert(`Error al apagar el sistema: ${error}`));
+            }
+        }
+        function executeFile() {
+            fetch('/execute-file')
+                .then(response => response.text())
+                .then(data => alert(data))
+                .catch(error => alert(`Error al ejecutar el archivo: ${error}`));
+        }
+    </script>
+</body>
+</html>
